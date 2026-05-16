@@ -39,4 +39,11 @@ class TaskController extends Controller
 
         return response()->json(['data' => $task]);
     }
+
+    public function destroy(Task $task): JsonResponse
+    {
+        $task->delete();
+
+        return response()->json(null, 204);
+    }
 }

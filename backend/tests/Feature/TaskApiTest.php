@@ -56,4 +56,14 @@ class TaskApiTest extends TestCase
             'status' => 'done',
         ]);
     }
+
+    public function test_can_delete_task()
+    {
+        $task = Task::factory()->create();
+
+        $response = $this->deleteJson("/api/tasks/{$task->id}");
+
+        $response->assertNoContent();
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+    }
 }
