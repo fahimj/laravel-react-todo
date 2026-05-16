@@ -26,4 +26,17 @@ class TaskController extends Controller
 
         return response()->json(['data' => $task], 201);
     }
+
+    public function update(Request $request, Task $task): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'in:pending,done',
+        ]);
+
+        $task->update($validated);
+
+        return response()->json(['data' => $task]);
+    }
 }

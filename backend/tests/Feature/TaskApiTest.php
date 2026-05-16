@@ -33,4 +33,27 @@ class TaskApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', ['title' => 'Buy groceries']);
     }
+
+    public function test_can_update_task()
+    {
+        $task = Task::factory()->create([
+            'title' => 'Old title',
+            'status' => 'pending',
+        ]);
+
+        $response = $this->putJson("/api/tasks/{$task->id}", [
+            'title' => 'New title',
+            'status' => 'done',
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('data.title', 'New title')
+            ->assertJsonPath('data.status', 'done');
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => 'New title',
+            'status' => 'done',
+        ]);
+    }
 }
