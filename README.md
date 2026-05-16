@@ -34,9 +34,6 @@ Full-stack CRUD to-do app — Laravel API + React/Vite + SQLite.
 ## Quick Start
 
 ```bash
-# Start PostgreSQL
-docker compose up -d
-
 # Backend
 cd backend
 composer install
