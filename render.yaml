@@ -1,0 +1,38 @@
+services:
+  # Backend Laravel Service
+  - type: web
+    name: backend-api
+    env: docker
+    dockerContext: backend
+    dockerfilePath: Dockerfile
+    plan: free # Change to a paid plan if needed
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        fromDatabase:
+          name: app-db
+          property: connectionString
+
+  # Frontend Static Site
+  - type: web
+    name: frontend-app
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        value: https://backend-api.onrender.com/api # Replace with your actual backend URL if it differs
+
+databases:
+  - name: app-db
+    plan: free # Change to a paid plan if needed
+    databaseName: laravel
+    user: laravel
