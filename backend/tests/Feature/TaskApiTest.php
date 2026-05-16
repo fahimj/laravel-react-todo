@@ -66,4 +66,20 @@ class TaskApiTest extends TestCase
         $response->assertNoContent();
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
+
+    public function test_delete_nonexistent_task_returns_404()
+    {
+        $response = $this->deleteJson('/api/tasks/999');
+
+        $response->assertNotFound();
+    }
+
+    public function test_update_nonexistent_task_returns_404()
+    {
+        $response = $this->putJson('/api/tasks/999', [
+            'title' => 'Ghost',
+        ]);
+
+        $response->assertNotFound();
+    }
 }
