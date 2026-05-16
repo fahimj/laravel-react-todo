@@ -19,4 +19,18 @@ class TaskApiTest extends TestCase
         $response->assertOk()
             ->assertJsonCount(3, 'data');
     }
+
+    public function test_can_create_task()
+    {
+        $response = $this->postJson('/api/tasks', [
+            'title' => 'Buy groceries',
+            'description' => 'Milk, eggs, bread',
+        ]);
+
+        $response->assertCreated()
+            ->assertJsonPath('data.title', 'Buy groceries')
+            ->assertJsonPath('data.status', 'pending');
+
+        $this->assertDatabaseHas('tasks', ['title' => 'Buy groceries']);
+    }
 }

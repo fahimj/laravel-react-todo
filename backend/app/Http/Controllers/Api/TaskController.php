@@ -13,4 +13,17 @@ class TaskController extends Controller
     {
         return response()->json(['data' => Task::all()]);
     }
+
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'in:pending,done',
+        ]);
+
+        $task = Task::create($validated);
+
+        return response()->json(['data' => $task], 201);
+    }
 }
